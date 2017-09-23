@@ -1,0 +1,27 @@
+version: '2.1'
+
+services:
+
+  homeassistant:
+    #image: homeassistant/raspberrypi3-homeassistant:0.51.2
+    image: homeassistant/raspberrypi3-homeassistant:latest
+    network_mode: "host"
+    privileged: true
+    restart: unless-stopped
+    ports:
+            - 0.0.0.0:8123:8123
+    volumes:
+      - /usr/share/zoneinfo/Europe/Amsterdam:/etc/timezome:ro
+      - ./homeassistant/config:/config
+    depends_on:
+      - mosquitto
+
+  mosquitto:
+    build:
+      context: ./mosquitto/build
+    restart: unless-stopped
+    ports:
+     - 0.0.0.0:1883:1883
+    volumes:
+     - ./mosquitto/config/auth.conf:/etc/mosquitto/conf.d/auth.conf:ro
+     - ./mosquitto/config/users.passwd:/etc/mosquitto/users.passwd:ro

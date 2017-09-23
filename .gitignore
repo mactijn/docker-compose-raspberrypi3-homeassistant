@@ -1,0 +1,2 @@
+homeassistant/config/*.*
+mosquitto/config/users.passwd
